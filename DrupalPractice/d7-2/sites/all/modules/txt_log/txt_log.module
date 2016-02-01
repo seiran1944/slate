@@ -1,0 +1,92 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: aris
+ * Date: 2014/11/20
+ * Time: 下午 12:06
+ */
+
+/**
+ * Implementation of hook_rules_event_info()
+ *
+ * step1: 定義動作函數
+ * step2: 掛勾到動作 - hook_action_info()
+ * step3: 掛勾到Rules模組的動作ui -  hook_rules_action_info()
+ * step4: 清除Cache (包含APC)
+ */
+/*function txt_log_rules_action_info() {
+    return array(
+        'example_rule_event' => array(
+            'label' => t('txt log rule action'),
+            'module' => 'txt_log',
+            'group' => 'file' ,
+            'variables' => array(
+                'current_user' => array('type' => 'user', 'label' => t('The current logged in user.')),
+                'article' => array('type' => 'node', 'label' => t('The article node.')),
+                'some_text' => array('type' => 'text', 'label' => t('Some arbitray text.')),
+            ),
+        ),
+    );
+}*/
+
+
+/*function txt_log_action_info() {
+
+    //file_put_contents($filePath, "\n".$content, FILE_APPEND);
+
+}*/
+
+/*//example
+function hook_action_info() {
+    return array(
+        'comment_unpublish_action' => array(
+            'type' => 'comment',
+            'label' => t('Unpublish comment'),
+            'configurable' => FALSE,
+            'behavior' => array('changes_property'),
+            'triggers' => array('comment_presave', 'comment_insert', 'comment_update'),
+        ),
+        'comment_unpublish_by_keyword_action' => array(
+            'type' => 'comment',
+            'label' => t('Unpublish comment containing keyword(s)'),
+            'configurable' => TRUE,
+            'behavior' => array('changes_property'),
+            'triggers' => array('comment_presave', 'comment_insert', 'comment_update'),
+        ),
+        'comment_save_action' => array(
+            'type' => 'comment',
+            'label' => t('Save comment'),
+            'configurable' => FALSE,
+            'triggers' => array('comment_insert', 'comment_update'),
+        ),
+    );
+}
+*/
+function txt_log_action_info() {
+    $config = array(
+        'txt_log_action' => array(
+            'label' => t('txt_log'),
+            'type' => 'file',
+            'configurable' => FALSE,
+            'triggers' => array('any'),
+        ),
+    );
+
+    return $config;
+}
+
+function txt_log_action($object, $context) {
+    $node = $context['node'];
+
+    $name = field_get_items('node', $node, 'field_name')[0]['value'];//MACHINE NAME   field_name
+    $time = field_get_items('node', $node, 'field_time')[0]['value'];//field_time
+    $to = field_get_items('node', $node, 'field_to')[0]['value'];//field_to
+    $plot = field_get_items('node', $node, 'field_plot')[0]['value'];//field_plot
+    $txtContent = $name.' , '.$time.' , '.$to.' , '.' , '.$plot;
+
+    $file_name = 'leavePermission.txt';
+    $filePath = '/var/www/html/Aris/d7-2/txtLog/'.$file_name;
+
+    file_put_contents($filePath, '\n'.$txtContent , FILE_APPEND);
+    drupal_set_message($txtContent.'      --- logged in : '.$filePath);
+}

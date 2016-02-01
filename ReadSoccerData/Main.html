@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<script type="text/javascript">
+			var count = 0;
+			function FlushPage(){
+				var _src = "https://tw.sports.yahoo.com/soccer/worldcup/standings/";
+				var _rearSrc = "Rear.php";
+				var showText = '<br>' + ++count + ' flushing : --';
+
+				var _object = document.getElementById('showBoard');
+				_object.innerHTML = showText;//trace info
+				
+				_object = document.getElementById('subFrame');
+				_object.contentWindow.location.href = _src;//reflash
+
+				_object = document.getElementById('rearPhp');
+				_object.contentWindow.location.href = _rearSrc;//call parsePHP
+
+				//window.setTimeout( "FlushPage()" , 300000 );
+				window.setTimeout( "FlushPage()" , 5000 );
+			}
+		</script>
+	</head>
+
+	<body>
+
+		<pre id="showBoard"></pre>
+
+		<a href="https://tw.sports.yahoo.com/soccer/worldcup/standings/">Link </a>
+		<iframe src="http://www.ruten.com.tw/" width = '100%' height="100%" id="subFrame"></iframe> 
+		<iframe src="" width = '100%' height="100%" id="rearPhp"></iframe> 
+
+		<script type="text/javascript">
+			FlushPage();
+		</script>
+		
+
+	</body>
+</html>

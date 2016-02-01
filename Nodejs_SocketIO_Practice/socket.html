@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Socket socks is on the sock !!</title>
+        <script src="https://cdn.socket.io/socket.io-1.1.0.js"></script>
+
+
+
+    </head>
+
+    <body>
+        <p id="msgBlock"></p>
+        <button onClick="sendMessage()">Message !!</button>
+
+        <script>
+            var socket = io.connect();
+
+            var counter = 0;
+            //var socket = io.connect("http://localhost:8080");
+            var domBox = document.getElementById("msgBlock");
+            const COUNT_DOWN_MSG = 'Your socket will be disconnected in ';
+            const SHUT_DOWN_MSG = 'Your socket has disconnected !!';
+
+            socket.on('connected', function(data){
+                                        domBox.innerHTML = data.message;
+                                    }
+            );
+
+            socket.on('messageRecived', function(data){
+                                            counter = data.count;//record the value back from server.
+                                            domBox.innerHTML = counter;
+                                        }
+            );
+
+            socket.on('shutDown', function(data){
+                                        counter = data.count;//breakUpMsg:String from server
+                                        countDown(data.shutDownClock);//shutDownClock
+                                    }
+            );
+
+            socket.on('disconnect', function () {
+                                        domBox.innerHTML = SHUT_DOWN_MSG;
+                                        counter = 0;
+                                    }
+            );
+
+            function sendMessage(){
+                socket.emit('message', {'count':counter});//to server
+            }
+
+            function countDown(clockTick){
+                domBox.innerHTML = COUNT_DOWN_MSG + clockTick + 'sec';
+                if(clockTick > 0){
+                    clockTick--;
+                    setTimeout(countDown, 1000 , clockTick);
+                }
+            }
+
+        </script>
+
+    </body>
+</html>

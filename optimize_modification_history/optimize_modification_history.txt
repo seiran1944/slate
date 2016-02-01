@@ -1,0 +1,105 @@
+============================================template
+Propose of Modification : MySQLi  ( 可輸入選項：MySQLi , TypeHint , Return Type , Optimization )
+filename : test\a.php
+line : from 10 to 10
+original : public function afunc( $bar, $car )
+modified : public function afunc( array $bar, CarClass $car = null)
+
+
+
+============================================
+			Propose of Modification : MySQLi  
+             filename : ReadSoccerData\Rear.php
+             line : from 12 to 117
+             original : MySQL(SQL injection weakness)
+             modified : MySqli
+
+============================================
+			Propose of Modification : MySQLi  
+             filename : AjaxTest1\DB_connection.php
+             line : from 12 to 77
+             original : MySQL(SQL injection weakness)
+             modified : MySqli
+
+============================================
+			Propose of Modification : MySQLi  
+             filename : GearmanStressTest\Action.php
+             line : from 35 to 50 , from 110 to 123
+             original : MySQL(SQL injection weakness)
+             modified : MySqli
+
+
+============================================
+			Propose of Modification : MySQLi , Optimization
+             filename : BlacklistSearch_MySQLRedis\Model.php
+             line : from 230 to 309
+             original : MySQL(SQL injection weakness)
+             modified : MySqli
+
+
+============================================
+			Propose of Modification : Optimization
+             filename : BlacklistSearch_MySQLRedis\Model.php
+             line : from 31 to 42
+             original : 
+				        if ( self::mysqli ) {
+				            return self::mysqli;
+				        }
+				        self::mysqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+
+				        return self::mysqli;
+
+
+             modified : $localMySqli = self::mysqli;
+				        if ( $localMySqli ) {
+				            return $localMySqli;
+				        }
+				        $localMySqli = new mysqli($dbhost, $dbuser, $dbpass, $dbname);
+				        self::mysqli = $localMySqli;
+
+				        return $localMySqli;
+
+
+============================================
+			Propose of Modification : Optimization  
+             filename : BlacklistSearch_MySQLRedis\Model.php
+             line : from 48 to 52
+
+             original : if (self::_redis == null) {
+				            self::_redis = new Redis(); //redis
+				            self::_redis->connect('127.0.0.1', 6379);
+				        }
+        				return self::_redis;
+
+             modified : $localRedis = self::_redis;
+				        if ($localRedis == null) {
+				            $localRedis = new Redis(); //redis
+				            $localRedis->connect('127.0.0.1', 6379);
+				            self::_redis = $localRedis;
+				        }
+				        return $localRedis;
+
+	        說明 : 減少self或$this的調用
+	        		20.	遞增一個物件屬性（如：$this->prop++）要比遞增一個區域變數慢3倍。
+	        		33.	並不是事必物件導向 (OOP)，物件導向往往開銷很大，每個方法和物件調用都會消耗很多記憶體。
+
+
+============================================
+			Propose of Modification : Optimization  
+             filename : BlacklistSearch_MySQLRedis\Model.php
+             line : 85,185,
+             original : $file_location(no default) ,$parsedline(unused parameter)
+             modified : $file_location='' , //$parsedline
+
+             說明 : 未指派內容的參數會使程式運行較慢(型別未定)
+             		22.	僅定義一個區域變數而沒在函數中調用它，同樣會減慢速度（其程度相當於遞增一個區域變數）。 PHP大概會檢查看是否存在全域變數。
+
+             		
+============================================
+			Propose of Modification : Optimization  
+             filename : AjaxTest1\DB_connection.php
+             line : 55
+             original : "SELECT * FROM `Soccer` WHERE _index=?"	(unused colume)
+             modified : "SELECT _content FROM `Soccer` WHERE _index=?"
+
+             說明 : 減少不必要的欄位輸出

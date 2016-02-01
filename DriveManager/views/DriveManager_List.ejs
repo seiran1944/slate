@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/javascripts/DriveManager_List.js"></script>
+      <script type="text/javascript" >
+          //view controllers
+          /*function showList( content ){
+              //alert('showList ' + content.length);
+              var fileListDOM = document.getElementsByClassName('FileListDOM')[0];
+              fileListDOM.innerHTML = '';
+              var itemList = parseContent( content );
+              *//*var currentItem = null;
+              for(var i in itemList ){
+                  currentItem = itemList[i];
+                  pustTableData(fileListDOM, currentItem);
+              }*//*
+              return itemList;
+          }
+
+          function parseContent(content){
+              var result = [];
+
+              var items = content.items;
+              var currentItem;
+              items.forEach( traceItem );
+              function traceItem( currentItem ){
+                  result.push(
+                          {
+                              'title':currentItem.title,
+                              'iconLink':currentItem.iconLink,
+                              'mimeType':currentItem.mimeType
+                          }
+                  );
+              }
+
+              return result;
+          }*/
+          function e04(){
+              alert('e04su3su;6');
+          }
+
+          function showTable(dataList){
+              //alert("showTable");
+              var tableDOM = document.getElementsByClassName('FileListDOM')[0];
+
+              //alert(dataList.items);
+              /*dataList.items.forEach(function(item) {
+                  tableDOM.innerHTML += '===========' + item.title;
+                  //pustTableData( tableDOM , item );
+              }*/
+              var items = dataList.items;
+
+              tableDOM.innerHTML = '<table>';
+              for( var tag in items ){
+                  //alert( items[tag] );
+                  tableDOM.innerHTML += assembleFileRow( items[tag] );
+              }
+              tableDOM.innerHTML += '</table>';
+          }
+
+          function assembleFileRow(item){
+              var html = '';
+              html += '<tr>';
+                  html += '<td>';
+                    var col = '<img src = ' + item.iconLink + '>';
+                        //col += '<a href="javascript:" onclick="clickFile( ' + item.webContentLink + ' )"> ' + item.title + ' </a>';
+                        col += '<a href= ' + item.webContentLink + ' > ' + item.title + ' </a>';
+
+                    html += col;
+                  html += '</td>';
+
+                  html += '<td>';
+
+                        html += '[<a href = "/DriveManager/delete?deleteId=' + item.id +'" >Delete</a>]';
+                  html += '</td>';
+
+              html += '</tr>';
+              return html;
+          }
+
+          function clickFile(webContentLink){
+              alert('Are you sure you wanna download this file ? : ' + webContentLink);
+              location.herf = webContentLink;
+          }
+
+      </script>
+  </head>
+
+
+  <body>
+    <h1><%= title %></h1>
+    <p><%= title %></p>
+
+    <ul>
+        <!--
+        <li><a href="/DriveManager/login" title="Login" target="_self">Login my Google Drive</a></li>
+        -->
+        <form action="/DriveManager/upload" enctype="multipart/form-data" method="post">
+            <!--<input type="text" name="title"><br>-->
+            <input type="file" name="upload" multiple="multiple"><br>
+            <input type="submit" value="Upload">
+        </form>
+
+        <table class="FileListDOM"></table>
+        <script>
+            var gDriveDataList = <%- JSON.stringify(content) %>;
+            showTable(gDriveDataList);
+        </script>
+
+
+    </ul>
+
+
+
+
+
+  </body>
+</html>
